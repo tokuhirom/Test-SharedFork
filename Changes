@@ -1,4 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.02
+
+        - ooppppsss. Test::Fork was already used by schwern.
+          rename to Test::SharedFork
+
 0.01    Wed Mar 25 14:06:28 2009
         - original version
