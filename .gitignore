@@ -1,4 +1,5 @@
 cover_db
+*.sw[pon]
 META.yml
 Makefile
 blib

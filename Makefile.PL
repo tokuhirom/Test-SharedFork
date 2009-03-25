@@ -2,7 +2,7 @@ use inc::Module::Install;
 name 'Test-Fork';
 all_from 'lib/Test/Fork.pm';
 
-# requires '';
+requires 'IPC::ShareLite' => 0.17;
 
 tests 't/*.t';
 author_tests 'xt';
