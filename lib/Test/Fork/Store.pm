@@ -7,7 +7,7 @@ use Storable ();
 sub new {
     my $class = shift;
     my $share = IPC::ShareLite->new(
-        -key => 0721,
+        -key => 0721, ## no critic
         -create => 'yes',
         -destroy => 'no',
     ) or die $!;
