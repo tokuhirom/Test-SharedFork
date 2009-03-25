@@ -1,6 +1,6 @@
 use inc::Module::Install;
-name 'Test-Fork';
-all_from 'lib/Test/Fork.pm';
+name 'Test-SharedFork';
+all_from 'lib/Test/SharedFork.pm';
 
 requires 'IPC::ShareLite' => 0.17;
 

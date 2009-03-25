@@ -1,11 +1,11 @@
-package Test::Fork;
+package Test::SharedFork;
 use strict;
 use warnings;
 our $VERSION = '0.01';
 use Test::Builder;
-use Test::Fork::Scalar;
-use Test::Fork::Array;
-use Test::Fork::Store;
+use Test::SharedFork::Scalar;
+use Test::SharedFork::Array;
+use Test::SharedFork::Store;
 use IPC::ShareLite ':lock';
 use Storable ();
 
@@ -13,7 +13,7 @@ our $TEST;
 sub import {
     $TEST = Test::Builder->new();
 
-    my $store = Test::Fork::Store->new();
+    my $store = Test::SharedFork::Store->new();
     $store->lock_cb(sub {
         $store->{share}->store(Storable::nfreeze(+{
             array => [],
@@ -37,9 +37,9 @@ sub child {
 }
 
 sub _setup {
-    my $store = Test::Fork::Store->new();
-    tie $TEST->{Curr_Test}, 'Test::Fork::Scalar', 0, $store;
-    tie @{$TEST->{Test_Results}}, 'Test::Fork::Array', $store;
+    my $store = Test::SharedFork::Store->new();
+    tie $TEST->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
+    tie @{$TEST->{Test_Results}}, 'Test::SharedFork::Array', $store;
 
     no strict 'refs';
     no warnings 'redefine';
@@ -66,21 +66,21 @@ __END__
 
 =head1 NAME
 
-Test::Fork - fork test
+Test::SharedFork - fork test
 
 =head1 SYNOPSIS
 
     use Test::More tests => 200;
-    use Test::Fork;
+    use Test::SharedFork;
 
     my $pid = fork();
     if ($pid == 0) {
         # child
-        Test::Fork->child;
+        Test::SharedFork->child;
         ok 1, "child $_" for 1..100;
     } elsif ($pid) {
         # parent
-        Test::Fork->parent;
+        Test::SharedFork->parent;
         ok 1, "parent $_" for 1..100;
         waitpid($pid, 0);
     } else {
@@ -89,7 +89,7 @@ Test::Fork - fork test
 
 =head1 DESCRIPTION
 
-Test::Fork is utility module for Test::Builder.
+Test::SharedFork is utility module for Test::Builder.
 This module makes forking test!
 
 This module merges test count with parent process & child process.
@@ -118,7 +118,7 @@ yappo
 
 =head1 SEE ALSO
 
-L<Test::TCP>
+L<Test::TCP>, L<Test::Fork>, L<Test::MultipleFork>
 
 =head1 LICENSE
 

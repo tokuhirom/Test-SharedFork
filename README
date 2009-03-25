@@ -1,11 +1,11 @@
-This is Perl module Test::Fork.
+This is Perl module Test::SharedFork.
 
 INSTALLATION
 
-Test::Fork installation is straightforward. If your CPAN shell is set up,
+Test::SharedFork installation is straightforward. If your CPAN shell is set up,
 you should just be able to do
 
-    % cpan Test::Fork
+    % cpan Test::SharedFork
 
 Download it, unpack it, then build it as per the usual:
 
@@ -18,9 +18,9 @@ Then install it:
 
 DOCUMENTATION
 
-Test::Fork documentation is available as in POD. So you can do:
+Test::SharedFork documentation is available as in POD. So you can do:
 
-    % perldoc Test::Fork
+    % perldoc Test::SharedFork
 
 to read the documentation online with your favorite pager.
 

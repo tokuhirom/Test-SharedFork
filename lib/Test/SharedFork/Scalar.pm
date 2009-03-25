@@ -1,4 +1,4 @@
-package Test::Fork::Scalar;
+package Test::SharedFork::Scalar;
 use strict;
 use warnings;
 use base 'Tie::Scalar';

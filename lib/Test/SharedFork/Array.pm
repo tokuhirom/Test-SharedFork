@@ -1,4 +1,4 @@
-package Test::Fork::Array;
+package Test::SharedFork::Array;
 use strict;
 use warnings;
 use base 'Tie::Array';

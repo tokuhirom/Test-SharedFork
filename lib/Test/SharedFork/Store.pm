@@ -1,4 +1,4 @@
-package Test::Fork::Store;
+package Test::SharedFork::Store;
 use strict;
 use warnings;
 use IPC::ShareLite ':lock';
