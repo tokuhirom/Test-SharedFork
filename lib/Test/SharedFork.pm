@@ -12,7 +12,7 @@ use Fcntl ':flock';
 
 our $TEST;
 my $tmpnam;
-sub import {
+BEGIN {
     $TEST ||= Test::Builder->new();
 
     $tmpnam ||= File::Temp::tmpnam();
