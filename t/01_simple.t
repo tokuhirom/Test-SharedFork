@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Test::SharedFork;
 
 my $pid = fork();
@@ -13,7 +13,7 @@ if ($pid == 0) {
         $i++;
         ok 1, "child $_"
     }
-    is $i, 20;
+    is $i, 20, 'child finished';
 
     exit;
 } elsif ($pid) {
@@ -25,8 +25,10 @@ if ($pid == 0) {
         $i++;
         ok 1, "parent $_";
     }
-    is $i, 20;
+    is $i, 20, 'parent finished';
     waitpid($pid, 0);
+
+    ok 1, 'wait ok';
 
     exit;
 } else {

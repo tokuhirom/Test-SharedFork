@@ -6,20 +6,22 @@ use Test::Builder;
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
 use Test::SharedFork::Store;
-use IPC::ShareLite ':lock';
 use Storable ();
+use File::Temp ();
+use Fcntl ':flock';
 
 our $TEST;
+my $tmpnam;
 sub import {
-    $TEST = Test::Builder->new();
+    $TEST ||= Test::Builder->new();
 
-    my $store = Test::SharedFork::Store->new();
+    $tmpnam ||= File::Temp::tmpnam();
+
+    my $store = Test::SharedFork::Store->new($tmpnam);
     $store->lock_cb(sub {
-        $store->{share}->store(Storable::nfreeze(+{
-            array => [],
-            scalar => 0,
-        }));
+        $store->initialize();
     }, LOCK_EX);
+    undef $store;
 }
 
 my $CLEANUPME;
@@ -37,7 +39,7 @@ sub child {
 }
 
 sub _setup {
-    my $store = Test::SharedFork::Store->new();
+    my $store = Test::SharedFork::Store->new($tmpnam);
     tie $TEST->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
     tie @{$TEST->{Test_Results}}, 'Test::SharedFork::Array', $store;
 
@@ -49,7 +51,7 @@ sub _setup {
             my @args = @_;
             $store->lock_cb(sub {
                 $cur->(@args);
-            }, LOCK_EX);
+            });
         };
     };
     return $store;
@@ -57,7 +59,7 @@ sub _setup {
 
 END {
     if ($CLEANUPME) {
-        $CLEANUPME->{share}->destroy(1);
+        unlink $tmpnam;
     }
 }
 

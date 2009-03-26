@@ -3,14 +3,13 @@ use strict;
 use warnings;
 use base 'Tie::Array';
 use Storable ();
-use IPC::ShareLite ':lock';
 
 sub _get {
     my $self = shift;
 
     return $self->{share}->lock_cb(sub {
         $self->{share}->get('array');
-    }, LOCK_SH);
+    });
 }
 sub FETCH {
     my ($self, $index) = @_;
@@ -36,7 +35,7 @@ sub STORE {
         my $cur = $share->get('array');
         $cur->[$index] = $val;
         $share->set(array => $cur);
-    }, LOCK_EX);
+    });
 }
 
 1;

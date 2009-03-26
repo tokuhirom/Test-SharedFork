@@ -1,17 +1,24 @@
 package Test::SharedFork::Store;
 use strict;
 use warnings;
-use IPC::ShareLite ':lock';
 use Storable ();
+use Fcntl ':seek', ':DEFAULT', ':flock';
 
 sub new {
-    my $class = shift;
-    my $share = IPC::ShareLite->new(
-        -key => 0721, ## no critic
-        -create => 'yes',
-        -destroy => 'no',
-    ) or die $!;
-    bless {share => $share, lock => 0}, $class;
+    my ($class, $tmpnam) = @_;
+    sysopen my $fh, $tmpnam, O_RDWR|O_CREAT or die $!;
+    bless {fh => $fh, lock => 0}, $class;
+}
+
+sub initialize {
+    my $self = shift;
+
+    truncate $self->{fh}, 0;
+    seek $self->{fh}, 0, SEEK_SET;
+    Storable::nstore_fd(+{
+        array => [],
+        scalar => 0,
+    }, $self->{fh});
 }
 
 sub share { shift->{share} }
@@ -27,8 +34,8 @@ sub get {
 
 sub get_nolock {
     my ($self, $key) = @_;
-    my $dat = $self->{share}->fetch() or die "cannot get the shared data";
-    Storable::thaw($dat)->{$key};
+    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+    Storable::fd_retrieve($self->{fh})->{$key};
 }
 
 sub set {
@@ -41,33 +48,36 @@ sub set {
 
 sub set_nolock {
     my ($self, $key, $val) = @_;
-    my $share = $self->{share};
-    my $dat = Storable::thaw($share->fetch());
+
+    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+    my $dat = Storable::fd_retrieve($self->{fh});
     $dat->{$key} = $val;
-    $share->store(Storable::nfreeze($dat))
+    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+    Storable::nstore_fd($dat => $self->{fh});
 }
 
 sub lock {
     my $self = shift;
-    $self->{lock}++;
-    $self->{share}->lock(@_);
 }
 
 sub unlock {
     my $self = shift;
-    $self->{lock}--;
-    if ($self->{lock} == 0) {
-        $self->{share}->unlock();
-    }
 }
 
 sub lock_cb {
     my ($self, $cb, $type) = @_;
     $type ||= LOCK_EX;
 
-    $self->lock(LOCK_EX);
+    $self->{lock}++;
+    flock $self->{fh}, LOCK_EX or die $!;
+
     my $ret = $cb->();
-    $self->unlock();
+
+    $self->{lock}--;
+    if ($self->{lock} == 0) {
+        flock $self->{fh}, LOCK_UN or die $!;
+    }
+
     $ret;
 }
 
