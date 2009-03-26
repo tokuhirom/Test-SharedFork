@@ -12,6 +12,8 @@ use Fcntl ':flock';
 
 our $TEST;
 my $tmpnam;
+my $STORE;
+our $MODE = 'DEFAULT';
 BEGIN {
     $TEST ||= Test::Builder->new();
 
@@ -22,26 +24,6 @@ BEGIN {
         $store->initialize();
     }, LOCK_EX);
     undef $store;
-}
-
-my $CLEANUPME;
-sub parent {
-    my $store = _setup();
-    $CLEANUPME = $store;
-}
-
-sub child {
-    # And musuka said: 'ラピュタは滅びぬ！何度でもよみがえるさ！'
-    # (Quote from 'LAPUTA: Castle in he Sky')
-    $TEST->no_ending(1);
-
-    _setup();
-}
-
-sub _setup {
-    my $store = Test::SharedFork::Store->new($tmpnam);
-    tie $TEST->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
-    tie @{$TEST->{Test_Results}}, 'Test::SharedFork::Array', $store;
 
     no strict 'refs';
     no warnings 'redefine';
@@ -49,11 +31,39 @@ sub _setup {
         my $cur = *{"Test::Builder::${name}"}{CODE};
         *{"Test::Builder::${name}"} = sub {
             my @args = @_;
-            $store->lock_cb(sub {
+            if ($STORE) {
+                $STORE->lock_cb(sub {
+                    $cur->(@args);
+                });
+            } else {
                 $cur->(@args);
-            });
+            }
         };
     };
+}
+
+my @CLEANUPME;
+sub parent {
+    my $store = _setup();
+    $STORE = $store;
+    push @CLEANUPME, $tmpnam;
+    $MODE = 'PARENT';
+}
+
+sub child {
+    # And musuka said: 'ラピュタは滅びぬ！何度でもよみがえるさ！'
+    # (Quote from 'LAPUTA: Castle in he Sky')
+    $TEST->no_ending(1);
+
+    $MODE = 'CHILD';
+    $STORE = _setup();
+}
+
+sub _setup {
+    my $store = Test::SharedFork::Store->new($tmpnam);
+    tie $TEST->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
+    tie @{$TEST->{Test_Results}}, 'Test::SharedFork::Array', $store;
+
     return $store;
 }
 
@@ -73,8 +83,9 @@ sub fork {
 }
 
 END {
-    if ($CLEANUPME) {
-        unlink $tmpnam;
+    undef $STORE;
+    if ($MODE eq 'PARENT') {
+        unlink $_ for @CLEANUPME;
     }
 }
 

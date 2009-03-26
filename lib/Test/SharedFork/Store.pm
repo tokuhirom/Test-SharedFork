@@ -56,17 +56,8 @@ sub set_nolock {
     Storable::nstore_fd($dat => $self->{fh});
 }
 
-sub lock {
-    my $self = shift;
-}
-
-sub unlock {
-    my $self = shift;
-}
-
 sub lock_cb {
-    my ($self, $cb, $type) = @_;
-    $type ||= LOCK_EX;
+    my ($self, $cb) = @_;
 
     $self->{lock}++;
     flock $self->{fh}, LOCK_EX or die $!;
@@ -80,5 +71,9 @@ sub lock_cb {
 
     $ret;
 }
+
+#sub DESTROY {
+#   warn "DESTROY $$ $Test::SharedFork::MODE";
+#}
 
 1;
