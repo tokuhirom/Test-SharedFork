@@ -57,6 +57,21 @@ sub _setup {
     return $store;
 }
 
+sub fork {
+    my $self = shift;
+
+    my $pid = fork();
+    if ($pid == 0) {
+        child();
+        return $pid;
+    } elsif ($pid > 0) {
+        parent();
+        return $pid;
+    } else {
+        return $pid; # error
+    }
+}
+
 END {
     if ($CLEANUPME) {
         unlink $tmpnam;
@@ -109,6 +124,11 @@ call this class method, if you are parent
 call this class method, if you are child.
 
 you can call this method many times(maybe the number of your children).
+
+=item fork
+
+This method calls fork(2), and call child() or parent() automatically.
+Return value is pass through from fork(2).
 
 =back
 
