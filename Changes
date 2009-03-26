@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::SharedFork
 
+0.03
+
+        - added Test::SharedFork->fork()
+        - use flock(2) instead of IPC::ShareLite
+
 0.02
 
         - ooppppsss. Test::Fork was already used by schwern.
