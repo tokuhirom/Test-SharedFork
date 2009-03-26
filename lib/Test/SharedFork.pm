@@ -1,7 +1,7 @@
 package Test::SharedFork;
 use strict;
 use warnings;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 use Test::Builder;
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;

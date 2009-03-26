@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.04
+
+        - [BUG] previous version does not works with many fork
+
 0.03
 
         - added Test::SharedFork->fork()
