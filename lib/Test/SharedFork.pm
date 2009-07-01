@@ -1,7 +1,8 @@
 package Test::SharedFork;
 use strict;
 use warnings;
-our $VERSION = '0.04';
+use base 'Test::Builder::Module';
+our $VERSION = '0.05';
 use Test::Builder;
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -10,13 +11,10 @@ use Storable ();
 use File::Temp ();
 use Fcntl ':flock';
 
-our $TEST;
 my $tmpnam;
 my $STORE;
 our $MODE = 'DEFAULT';
 BEGIN {
-    $TEST ||= Test::Builder->new();
-
     $tmpnam ||= File::Temp::tmpnam();
 
     my $store = Test::SharedFork::Store->new($tmpnam);
@@ -53,7 +51,7 @@ sub parent {
 sub child {
     # And musuka said: 'ラピュタは滅びぬ！何度でもよみがえるさ！'
     # (Quote from 'LAPUTA: Castle in he Sky')
-    $TEST->no_ending(1);
+    __PACKAGE__->builder->no_ending(1);
 
     $MODE = 'CHILD';
     $STORE = _setup();
@@ -61,8 +59,8 @@ sub child {
 
 sub _setup {
     my $store = Test::SharedFork::Store->new($tmpnam);
-    tie $TEST->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
-    tie @{$TEST->{Test_Results}}, 'Test::SharedFork::Array', $store;
+    tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
+    tie @{__PACKAGE__->builder->{Test_Results}}, 'Test::SharedFork::Array', $store;
 
     return $store;
 }
