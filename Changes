@@ -2,7 +2,7 @@ Revision history for Perl extension Test::SharedFork
 
 0.06
 
-        - call parent() automatically
+        - call parent() automatically(reported by kazuho++)
 
 0.05
 
