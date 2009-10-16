@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 use Test::Builder;
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -13,32 +13,7 @@ use Fcntl ':flock';
 
 my $tmpnam;
 my $STORE;
-our $MODE = 'DEFAULT';
-BEGIN {
-    $tmpnam ||= File::Temp::tmpnam();
-
-    my $store = Test::SharedFork::Store->new($tmpnam);
-    $store->lock_cb(sub {
-        $store->initialize();
-    }, LOCK_EX);
-    undef $store;
-
-    no strict 'refs';
-    no warnings 'redefine';
-    for my $name (qw/ok skip todo_skip current_test/) {
-        my $cur = *{"Test::Builder::${name}"}{CODE};
-        *{"Test::Builder::${name}"} = sub {
-            my @args = @_;
-            if ($STORE) {
-                $STORE->lock_cb(sub {
-                    $cur->(@args);
-                });
-            } else {
-                $cur->(@args);
-            }
-        };
-    };
-}
+our $MODE;
 
 my @CLEANUPME;
 sub parent {
@@ -64,6 +39,35 @@ sub _setup {
 
     return $store;
 }
+
+BEGIN {
+    $tmpnam ||= File::Temp::tmpnam();
+
+    my $store = Test::SharedFork::Store->new($tmpnam);
+    $store->lock_cb(sub {
+        $store->initialize();
+    }, LOCK_EX);
+    undef $store;
+
+    no strict 'refs';
+    no warnings 'redefine';
+    for my $name (qw/ok skip todo_skip current_test/) {
+        my $cur = *{"Test::Builder::${name}"}{CODE};
+        *{"Test::Builder::${name}"} = sub {
+            my @args = @_;
+            if ($STORE) {
+                $STORE->lock_cb(sub {
+                    $cur->(@args);
+                });
+            } else {
+                $cur->(@args);
+            }
+        };
+    };
+
+    parent();
+}
+
 
 sub fork {
     my $self = shift;

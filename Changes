@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.06
+
+        - call parent() automatically
+
 0.05
 
         - enhancements for subtests support
