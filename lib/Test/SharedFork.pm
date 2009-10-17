@@ -13,14 +13,13 @@ use Fcntl ':flock';
 
 my $tmpnam;
 my $STORE;
-our $MODE;
+my $ppid;
 
 my @CLEANUPME;
 sub parent {
     my $store = _setup();
     $STORE = $store;
     push @CLEANUPME, $tmpnam;
-    $MODE = 'PARENT';
 }
 
 sub child {
@@ -28,7 +27,6 @@ sub child {
     # (Quote from 'LAPUTA: Castle in he Sky')
     __PACKAGE__->builder->no_ending(1);
 
-    $MODE = 'CHILD';
     $STORE = _setup();
 }
 
@@ -42,6 +40,7 @@ sub _setup {
 
 BEGIN {
     $tmpnam ||= File::Temp::tmpnam();
+    $ppid = $$; # I'm parent!
 
     my $store = Test::SharedFork::Store->new($tmpnam);
     $store->lock_cb(sub {
@@ -86,7 +85,7 @@ sub fork {
 
 END {
     undef $STORE;
-    if ($MODE eq 'PARENT') {
+    if ($ppid eq $$) { # cleanup method only run on original process.
         unlink $_ for @CLEANUPME;
     }
 }
