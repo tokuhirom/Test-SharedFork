@@ -21,8 +21,6 @@ sub initialize {
     }, $self->{fh});
 }
 
-sub share { shift->{share} }
-
 sub get {
     my ($self, $key) = @_;
 
