@@ -7,6 +7,7 @@ requires 'Test::More' => 0.62; # Test::More 0.62 is really needed
 tests 't/*.t';
 author_tests 'xt';
 
+readme_markdown_from 'lib/Test/SharedFork.pm';
 build_requires 'Test::More';
 use_test_base;
 auto_include;
