@@ -10,9 +10,12 @@ sub main {
     if ($pid>0) {
         ok 1;
 
+        1 while wait() == -1;
+
         my $pid = Test::SharedFork->fork();
         if ($pid>0) {
             ok 1;
+            1 while wait() == -1;
             return;
         } elsif ($pid==0) {
             ok 1;
