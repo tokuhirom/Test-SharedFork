@@ -5,9 +5,22 @@ use Storable ();
 use Fcntl ':seek', ':DEFAULT', ':flock';
 
 sub new {
-    my ($class, $tmpnam) = @_;
-    sysopen my $fh, $tmpnam, O_RDWR|O_CREAT or die $!;
-    bless {fh => $fh, lock => 0}, $class;
+    my ($class, $filename) = @_;
+    my $self = bless {filename => $filename, lock => 0, pid => $$}, $class;
+    $self->open();
+    return $self;
+}
+
+sub open {
+    my $self = shift;
+    sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
+    $self->{fh} = $fh;
+}
+
+sub close {
+    my $self = shift;
+    close $self->{fh};
+    undef $self->{fh};
 }
 
 sub initialize {
