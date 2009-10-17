@@ -17,8 +17,7 @@ my $ppid;
 
 my @CLEANUPME;
 sub parent {
-    my $store = _setup();
-    $STORE = $store;
+    $STORE = _setup();
     push @CLEANUPME, $tmpnam;
 }
 
