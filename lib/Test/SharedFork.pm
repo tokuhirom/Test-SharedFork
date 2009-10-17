@@ -15,10 +15,8 @@ my $tmpnam;
 my $STORE;
 my $ppid;
 
-my @CLEANUPME;
 sub parent {
     $STORE = _setup();
-    push @CLEANUPME, $tmpnam;
 }
 
 sub child {
@@ -85,7 +83,7 @@ sub fork {
 END {
     undef $STORE;
     if ($ppid eq $$) { # cleanup method only run on original process.
-        unlink $_ for @CLEANUPME;
+        unlink $tmpnam;
     }
 }
 
