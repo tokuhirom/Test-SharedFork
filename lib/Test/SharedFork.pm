@@ -20,10 +20,6 @@ sub parent {
 }
 
 sub child {
-    # And musuka said: 'ラピュタは滅びぬ！何度でもよみがえるさ！'
-    # (Quote from 'LAPUTA: Castle in he Sky')
-    __PACKAGE__->builder->no_ending(1);
-
     $STORE = _setup();
 }
 
@@ -48,18 +44,25 @@ BEGIN {
     no strict 'refs';
     no warnings 'redefine';
     for my $name (qw/ok skip todo_skip current_test/) {
-        my $cur = *{"Test::Builder::${name}"}{CODE};
+        my $orig = *{"Test::Builder::${name}"}{CODE};
         *{"Test::Builder::${name}"} = sub {
             my @args = @_;
             if ($STORE) {
                 $STORE->lock_cb(sub {
-                    $cur->(@args);
+                    $orig->(@args);
                 });
             } else {
-                $cur->(@args);
+                $orig->(@args);
             }
         };
     };
+    {
+        my $orig = *{"Test::Builder::no_ending"}{CODE};
+        *{"Test::Builder::no_ending"} = sub {
+            if   ( $ppid == $$ ) { goto $orig }
+            else                 { return 1 }     # should not process ending on child process
+        };
+    }
 
     parent();
 }
