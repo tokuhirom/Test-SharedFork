@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base 'Test::Builder::Module';
 our $VERSION = '0.06';
-use Test::Builder;
+use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
 use Test::SharedFork::Store;
@@ -15,13 +15,8 @@ my $tmpnam;
 my $STORE;
 my $ppid;
 
-sub parent {
-    $STORE = _setup();
-}
-
-sub child {
-    $STORE = _setup();
-}
+sub parent { $STORE = _setup() }
+sub child { $STORE = _setup() }
 
 sub _setup {
     my $store = Test::SharedFork::Store->new($tmpnam);
@@ -56,13 +51,6 @@ BEGIN {
             }
         };
     };
-    {
-        my $orig = *{"Test::Builder::no_ending"}{CODE};
-        *{"Test::Builder::no_ending"} = sub {
-            if   ( $ppid == $$ ) { goto $orig }
-            else                 { return 1 }     # should not process ending on child process
-        };
-    }
 
     parent();
 }
