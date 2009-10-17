@@ -3,14 +3,15 @@ use strict;
 use warnings;
 use base 'Tie::Scalar';
 
-sub FETCH {
-    my $self = shift;
-    $self->{share}->get('scalar');
-}
-
+# create new tied scalar
 sub TIESCALAR {
     my ($class, $initial, $share) = @_;
     bless { share => $share }, $class;
+}
+
+sub FETCH {
+    my $self = shift;
+    $self->{share}->get('scalar');
 }
 
 sub STORE {
