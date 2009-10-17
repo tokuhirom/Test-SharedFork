@@ -13,7 +13,6 @@ if ($pid == 0) {
     }
     is $i, 20, 'child finished';
 
-    1 while wait() != -1;
     exit;
 } elsif ($pid) {
     # parent
