@@ -15,26 +15,18 @@ my $tmpnam;
 my $STORE;
 my $ppid;
 
-sub parent { $STORE = _setup() }
-sub child { $STORE = _setup() }
-
-sub _setup {
-    my $store = Test::SharedFork::Store->new($tmpnam);
-    tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
-    tie @{__PACKAGE__->builder->{Test_Results}}, 'Test::SharedFork::Array', $store;
-
-    return $store;
-}
+sub parent { }
+sub child  { }
 
 BEGIN {
     $tmpnam ||= File::Temp::tmpnam();
     $ppid = $$; # I'm parent!
 
-    my $store = Test::SharedFork::Store->new($tmpnam);
-    $store->lock_cb(sub {
-        $store->initialize();
-    }, LOCK_EX);
-    undef $store;
+    $STORE = Test::SharedFork::Store->new($tmpnam, sub {
+        my $store = shift;
+        tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
+        tie @{__PACKAGE__->builder->{Test_Results}}, 'Test::SharedFork::Array', $store;
+    });
 
     no strict 'refs';
     no warnings 'redefine';
@@ -42,17 +34,11 @@ BEGIN {
         my $orig = *{"Test::Builder::${name}"}{CODE};
         *{"Test::Builder::${name}"} = sub {
             my @args = @_;
-            if ($STORE) {
-                $STORE->lock_cb(sub {
-                    $orig->(@args);
-                });
-            } else {
+            $STORE->lock_cb(sub {
                 $orig->(@args);
-            }
+            });
         };
     };
-
-    parent();
 }
 
 

@@ -5,14 +5,22 @@ use Storable ();
 use Fcntl ':seek', ':DEFAULT', ':flock';
 
 sub new {
-    my ($class, $filename) = @_;
-    my $self = bless {filename => $filename, lock => 0, pid => $$}, $class;
+    my ($class, $filename, $cb) = @_;
+    my $self = bless {callback_on_open => $cb, filename => $filename, lock => 0, pid => $$}, $class;
     $self->open();
+
+    # initialize
+    Storable::nstore_fd(+{
+        array => [],
+        scalar => 0,
+    }, $self->{fh});
+
     return $self;
 }
 
 sub open {
     my $self = shift;
+    $self->{callback_on_open}->($self);
     sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
     $self->{fh} = $fh;
 }
@@ -23,20 +31,10 @@ sub close {
     undef $self->{fh};
 }
 
-sub initialize {
-    my $self = shift;
-
-    truncate $self->{fh}, 0;
-    seek $self->{fh}, 0, SEEK_SET;
-    Storable::nstore_fd(+{
-        array => [],
-        scalar => 0,
-    }, $self->{fh});
-}
-
 sub get {
     my ($self, $key) = @_;
 
+    $self->_reopen_if_needed;
     my $ret = $self->lock_cb(sub {
         $self->get_nolock($key);
     }, LOCK_SH);
@@ -45,6 +43,7 @@ sub get {
 
 sub get_nolock {
     my ($self, $key) = @_;
+    $self->_reopen_if_needed;
     sysseek $self->{fh}, 0, SEEK_SET or die $!;
     Storable::fd_retrieve($self->{fh})->{$key};
 }
@@ -52,6 +51,7 @@ sub get_nolock {
 sub set {
     my ($self, $key, $val) = @_;
 
+    $self->_reopen_if_needed;
     $self->lock_cb(sub {
         $self->set_nolock($key, $val);
     }, LOCK_EX);
@@ -59,6 +59,8 @@ sub set {
 
 sub set_nolock {
     my ($self, $key, $val) = @_;
+
+    $self->_reopen_if_needed;
 
     sysseek $self->{fh}, 0, SEEK_SET or die $!;
     my $dat = Storable::fd_retrieve($self->{fh});
@@ -69,6 +71,8 @@ sub set_nolock {
 
 sub lock_cb {
     my ($self, $cb) = @_;
+
+    $self->_reopen_if_needed;
 
     $self->{lock}++;
     flock $self->{fh}, LOCK_EX or die $!;
@@ -81,6 +85,19 @@ sub lock_cb {
     }
 
     $ret;
+}
+
+sub _reopen_if_needed {
+    my $self = shift;
+    if ($self->{pid} != $$) { # forked, and I'm just a child.
+        $self->{pid} = $$;
+        if ($self->{lock} > 0) { # unlock! I'm not owner!
+            flock $self->{fh}, LOCK_UN or die $!;
+            $self->{lock} = 0;
+        }
+        $self->close();
+        $self->open();
+    }
 }
 
 #sub DESTROY {
