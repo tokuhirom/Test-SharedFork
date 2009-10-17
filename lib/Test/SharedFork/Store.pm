@@ -3,10 +3,13 @@ use strict;
 use warnings;
 use Storable ();
 use Fcntl ':seek', ':DEFAULT', ':flock';
+use File::Temp ();
 
 sub new {
-    my ($class, $filename, $cb) = @_;
-    my $self = bless {callback_on_open => $cb, filename => $filename, lock => 0, pid => $$}, $class;
+    my $class = shift;
+    my %args = @_;
+    my $filename = File::Temp::tmpnam();
+    my $self = bless {callback_on_open => $args{cb}, filename => $filename, lock => 0, pid => $$, ppid => $$}, $class;
     $self->open();
 
     # initialize
@@ -100,8 +103,11 @@ sub _reopen_if_needed {
     }
 }
 
-#sub DESTROY {
-#   warn "DESTROY $$ $Test::SharedFork::MODE";
-#}
+sub DESTROY {
+    my $self = shift;
+    if ($self->{ppid} eq $$) { # cleanup method only run on original process.
+        unlink $self->{filename};
+    }
+}
 
 1;
