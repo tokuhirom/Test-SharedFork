@@ -1,6 +1,11 @@
 Revision history for Perl extension Test::SharedFork
 
-0.07
+0.07_01
+
+        - win32 support
+        - added premitive test cases
+
+0.07(not uploaded to cpan)
 
         - cleanup code.->parent, ->child, ->fork was obsoleted.
 
