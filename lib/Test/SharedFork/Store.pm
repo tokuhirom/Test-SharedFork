@@ -4,6 +4,7 @@ use warnings;
 use Storable ();
 use Fcntl ':seek', ':DEFAULT', ':flock';
 use File::Temp ();
+use IO::Handle;
 
 sub new {
     my $class = shift;
@@ -27,6 +28,7 @@ sub open {
         $cb->($self);
     }
     sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
+    $fh->autoflush(1);
     $self->{fh} = $fh;
 }
 
@@ -79,8 +81,9 @@ sub lock_cb {
 
     $self->_reopen_if_needed;
 
-    $self->{lock}++;
-    flock $self->{fh}, LOCK_EX or die $!;
+    if ($self->{lock}++ == 0) {
+        flock $self->{fh}, LOCK_EX or die $!;
+    }
 
     my $ret = $cb->();
 
