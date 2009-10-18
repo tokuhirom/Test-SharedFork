@@ -23,7 +23,9 @@ sub new {
 
 sub open {
     my $self = shift;
-    $self->{callback_on_open}->($self);
+    if (my $cb = $self->{callback_on_open}) {
+        $cb->($self);
+    }
     sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
     $self->{fh} = $fh;
 }
