@@ -51,7 +51,7 @@ sub get {
 sub get_nolock {
     my ($self, $key) = @_;
     $self->_reopen_if_needed;
-    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+    seek $self->{fh}, 0, SEEK_SET or die $!;
     Storable::fd_retrieve($self->{fh})->{$key};
 }
 
@@ -69,10 +69,12 @@ sub set_nolock {
 
     $self->_reopen_if_needed;
 
-    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+    seek $self->{fh}, 0, SEEK_SET or die $!;
     my $dat = Storable::fd_retrieve($self->{fh});
     $dat->{$key} = $val;
-    sysseek $self->{fh}, 0, SEEK_SET or die $!;
+
+    truncate $self->{fh}, 0;
+    seek $self->{fh}, 0, SEEK_SET or die $!;
     Storable::nstore_fd($dat => $self->{fh});
 }
 
