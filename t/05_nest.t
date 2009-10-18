@@ -7,25 +7,25 @@ use Test::SharedFork;
 
 sub main {
     my $pid = Test::SharedFork->fork();
-    if ($pid>0) {
+    if ($pid==0) {
+        ok 1;
+        return;
+    } elsif (defined $pid) {
         ok 1;
 
         1 while wait() == -1;
 
         my $pid = Test::SharedFork->fork();
-        if ($pid>0) {
+        if ($pid==0) {
+            ok 1;
+            return;
+        } elsif (defined $pid) {
             ok 1;
             1 while wait() == -1;
-            return;
-        } elsif ($pid==0) {
-            ok 1;
             return;
         } else {
             die $!;
         }
-    } elsif ($pid==0) {
-        ok 1;
-        return;
     } else {
         die "fork failed: $!";
     }
