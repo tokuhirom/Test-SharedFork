@@ -18,7 +18,7 @@ for (1..10) {
 
         ok 1, 'wait ok';
     } else {
-        die $!;
+        die "fork failed: $!";
     }
 }
 

@@ -27,6 +27,6 @@ sub main {
         ok 1;
         return;
     } else {
-        die $!;
+        die "fork failed: $!";
     }
 }
