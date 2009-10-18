@@ -4,7 +4,7 @@ all_from 'lib/Test/SharedFork.pm';
 
 requires 'Test::More' => 0.62; # Test::More 0.62 is really needed
 
-tests 't/*.t';
+tests 't/*.t t/*/*.t t/*/*/*.t';
 author_tests 'xt';
 
 readme_markdown_from 'lib/Test/SharedFork.pm';
