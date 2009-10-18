@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.08
+
+        - release to CPAN(no feature changes)
+
 0.07_01
 
         - win32 support
