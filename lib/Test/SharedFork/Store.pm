@@ -17,7 +17,7 @@ sub new {
     Storable::nstore_fd(+{
         array => [],
         scalar => 0,
-    }, $self->{fh});
+    }, $self->{fh}) or die "Cannot write initialize data to $filename";
 
     return $self;
 }
@@ -75,7 +75,7 @@ sub set_nolock {
 
     truncate $self->{fh}, 0;
     seek $self->{fh}, 0, SEEK_SET or die $!;
-    Storable::nstore_fd($dat => $self->{fh});
+    Storable::nstore_fd($dat => $self->{fh}) or die "Cannot store data to $self->{filename}";
 }
 
 sub lock_cb {
