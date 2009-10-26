@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::SharedFork
 
+0.09
+
+        - do not use done_testing RT#50689
+          (reported by andk++)
+
 0.08
 
         - release to CPAN(no feature changes)
