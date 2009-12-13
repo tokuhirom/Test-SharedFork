@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -24,6 +24,7 @@ BEGIN {
     for my $name (qw/ok skip todo_skip current_test/) {
         my $orig = *{"Test::Builder::${name}"}{CODE};
         *{"Test::Builder::${name}"} = sub {
+            local $Test::Builder::Level += 4;
             my @args = @_;
             $STORE->lock_cb(sub {
                 $orig->(@args);
@@ -79,6 +80,8 @@ yappo
 =head1 THANKS TO
 
 kazuhooku
+
+konbuizm
 
 =head1 SEE ALSO
 

@@ -1,10 +1,15 @@
 Revision history for Perl extension Test::SharedFork
 
+0.09
+
+        - fixed $Test::Builder::Level(by konbuizm)
+
 0.08
 
         - fixed deps for Test::More 0.88(thanks to andk++)
 
 0.07(not released to cpan)
+
         - cleanup code.->parent, ->child, ->fork was obsoleted.
 
 0.07_01
