@@ -1,4 +1,9 @@
+# stub
+sub readme_markdown_from { }
+sub author_tests { }
+
 use inc::Module::Install;
+
 name 'Test-SharedFork';
 all_from 'lib/Test/SharedFork.pm';
 
