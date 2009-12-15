@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.10
+
+        - oops
+
 0.09
 
         - fixed $Test::Builder::Level(by konbuizm)
