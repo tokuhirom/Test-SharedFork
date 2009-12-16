@@ -7,6 +7,7 @@ use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
 use Test::SharedFork::Store;
+use 5.008000;
 
 my $STORE;
 
