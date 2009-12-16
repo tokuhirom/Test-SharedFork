@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.11
+
+        - write depended perl version. this module requires perl5.8 or later.
+
 0.10
 
         - oops
