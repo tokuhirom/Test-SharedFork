@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::SharedFork
 
+0.12
+
+        - fixed lazy loading issue RT#60426
+          (reported by J.)
+
 0.11
 
         - write depended perl version. this module requires perl5.8 or later.
