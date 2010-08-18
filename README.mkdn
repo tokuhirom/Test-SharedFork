@@ -36,9 +36,11 @@ yappo
 
 kazuhooku
 
+konbuizm
+
 # SEE ALSO
 
-[Test::TCP](http://search.cpan.org/search?mode=module&query=Test::TCP), [Test::Fork](http://search.cpan.org/search?mode=module&query=Test::Fork), [Test::MultipleFork](http://search.cpan.org/search?mode=module&query=Test::MultipleFork)
+[Test::TCP](http://search.cpan.org/perldoc?Test::TCP), [Test::Fork](http://search.cpan.org/perldoc?Test::Fork), [Test::MultipleFork](http://search.cpan.org/perldoc?Test::MultipleFork)
 
 # LICENSE
 
