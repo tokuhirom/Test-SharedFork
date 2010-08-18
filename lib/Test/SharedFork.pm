@@ -12,13 +12,7 @@ use 5.008000;
 my $STORE;
 
 BEGIN {
-    $STORE = Test::SharedFork::Store->new(
-        cb => sub {
-            my $store = shift;
-            tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
-            tie @{ __PACKAGE__->builder->{Test_Results} }, 'Test::SharedFork::Array', $store;
-        }
-    );
+    $STORE = Test::SharedFork::Store->new( __PACKAGE__->builder );
 
     no strict 'refs';
     no warnings 'redefine';

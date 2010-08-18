@@ -7,17 +7,21 @@ use File::Temp ();
 use IO::Handle;
 
 sub new {
-    my $class = shift;
-    my %args = @_;
+    my ($class, $builder) = @_;
+    $builder || die "missing required argument 'builder'";
+
     my $filename = File::Temp::tmpnam();
-    my $self = bless {callback_on_open => $args{cb}, filename => $filename, lock => 0, pid => $$, ppid => $$}, $class;
+
+    my $init = {
+        array  => $builder->{Test_Results},
+        scalar => $builder->{Curr_Test},
+    };
+
+    my $self = bless {builder => $builder, filename => $filename, lock => 0, pid => $$, ppid => $$}, $class;
     $self->open();
 
     # initialize
-    Storable::nstore_fd(+{
-        array => [],
-        scalar => 0,
-    }, $self->{fh}) or die "Cannot write initialize data to $filename";
+    Storable::nstore_fd($init, $self->{fh}) or die "Cannot write initialize data to $filename";
 
     return $self;
 }
@@ -25,7 +29,8 @@ sub new {
 sub open {
     my $self = shift;
     if (my $cb = $self->{callback_on_open}) {
-        $cb->($self);
+        tie $self->{builder}->{Curr_Test}, 'Test::SharedFork::Scalar', $self;
+        tie @{ $self->{builder}->{Test_Results} }, 'Test::SharedFork::Array', $self;
     }
     sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
     $fh->autoflush(1);
