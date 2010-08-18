@@ -5,7 +5,7 @@ use base 'Tie::Scalar';
 
 # create new tied scalar
 sub TIESCALAR {
-    my ($class, $share) = @_;
+    my ($class, $initial, $share) = @_;
     bless { share => $share }, $class;
 }
 
