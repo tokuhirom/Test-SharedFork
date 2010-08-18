@@ -10,14 +10,17 @@ sub new {
     my $class = shift;
     my %args = @_;
     my $filename = File::Temp::tmpnam();
+
+    my $init = Storable::dclone({
+        array  => $args{builder}->{Test_Results},
+        scalar => $args{builder}->{Curr_Test},
+    });
+
     my $self = bless {callback_on_open => $args{cb}, filename => $filename, lock => 0, pid => $$, ppid => $$}, $class;
     $self->open();
 
     # initialize
-    Storable::nstore_fd(+{
-        array => [],
-        scalar => 0,
-    }, $self->{fh}) or die "Cannot write initialize data to $filename";
+    Storable::nstore_fd($init, $self->{fh}) or die "Cannot write initialize data to $filename";
 
     return $self;
 }

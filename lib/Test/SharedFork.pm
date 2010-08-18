@@ -17,7 +17,8 @@ BEGIN {
             my $store = shift;
             tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', 0, $store;
             tie @{ __PACKAGE__->builder->{Test_Results} }, 'Test::SharedFork::Array', $store;
-        }
+        },
+        builder => __PACKAGE__->builder,
     );
 
     no strict 'refs';
