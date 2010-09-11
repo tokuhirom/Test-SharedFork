@@ -11,12 +11,15 @@ sub new {
     my %args = @_;
     my $filename = File::Temp::tmpnam();
 
-    my $init = Storable::dclone({
-        array  => $args{builder}->{Test_Results},
-        scalar => $args{builder}->{Curr_Test},
-    });
+    my $init = Storable::dclone($args{init} || +{});
 
-    my $self = bless {callback_on_open => $args{cb}, filename => $filename, lock => 0, pid => $$, ppid => $$}, $class;
+    my $self = bless {
+        callback_on_open => $args{cb},
+        filename         => $filename,
+        lock             => 0,
+        pid              => $$,
+        ppid             => $$,
+    }, $class;
     $self->open();
 
     # initialize

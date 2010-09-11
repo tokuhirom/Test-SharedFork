@@ -5,7 +5,7 @@ use Test::SharedFork::Scalar;
 use Test::More tests => 1;
 
 my $store = Test::SharedFork::Store->new();
-tie my $x, 'Test::SharedFork::Scalar', $store;
+tie my $x, 'Test::SharedFork::Scalar', $store, 'scalar';
 $x = 3;
 is $x, 3;
 

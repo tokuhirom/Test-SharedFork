@@ -6,8 +6,9 @@ use Storable ();
 
 # create new tied array
 sub TIEARRAY {
-    my ($class, $share) = @_;
-    my $self = bless { share => $share }, $class;
+    my ($class, $share, $key) = @_;
+    die "missing key" unless $key;
+    my $self = bless { share => $share, key => $key }, $class;
     $self;
 }
 
@@ -15,7 +16,7 @@ sub TIEARRAY {
 sub _get {
     my $self = shift;
     my $lock = $self->{share}->get_lock();
-    return $self->{share}->get('array');
+    return $self->{share}->get($self->{key});
 }
 sub FETCH {
     my ($self, $index) = @_;
@@ -33,9 +34,9 @@ sub STORE {
     my $lock = $self->{share}->get_lock();
 
     my $share = $self->{share};
-    my $cur = $share->get('array');
+    my $cur = $share->get($self->{key});
     $cur->[$index] = $val;
-    $share->set(array => $cur);
+    $share->set($self->{key} => $cur);
 }
 
 1;

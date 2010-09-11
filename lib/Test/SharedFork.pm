@@ -12,13 +12,19 @@ use 5.008000;
 my $STORE;
 
 BEGIN {
+    my $builder = __PACKAGE__->builder;
     $STORE = Test::SharedFork::Store->new(
         cb => sub {
             my $store = shift;
-            tie __PACKAGE__->builder->{Curr_Test}, 'Test::SharedFork::Scalar', $store;
-            tie @{ __PACKAGE__->builder->{Test_Results} }, 'Test::SharedFork::Array', $store;
+            tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
+              $store, 'Curr_Test';
+            tie @{ $builder->{Test_Results} },
+              'Test::SharedFork::Array', $store, 'Test_Results';
         },
-        builder => __PACKAGE__->builder,
+        init => +{
+            Test_Results => $builder->{Test_Results},
+            Curr_Test    => $builder->{Curr_Test},
+        },
     );
 
     # make methods atomic.
