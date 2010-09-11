@@ -2,12 +2,43 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.12';
+our $VERSION = '0.13_01';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
 use Test::SharedFork::Store;
 use 5.008000;
+
+{
+    package #
+        Test::SharedFork::Contextual;
+
+    sub call {
+        my $code = shift;
+        my $wantarray = [caller(1)]->[5];
+        if ($wantarray) {
+            my @result = $code->();
+            bless {result => \@result, wantarray => $wantarray}, __PACKAGE__;
+        } elsif (defined $wantarray) {
+            my $result = $code->();
+            bless {result => $result, wantarray => $wantarray}, __PACKAGE__;
+        } else {
+            { ; $code->(); } # void context
+            bless {wantarray => $wantarray}, __PACKAGE__;
+        }
+    }
+
+    sub result {
+        my $self = shift;
+        if ($self->{wantarray}) {
+            return @{ $self->{result} };
+        } elsif (defined $self->{wantarray}) {
+            return $self->{result};
+        } else {
+            return;
+        }
+    }
+}
 
 my $STORE;
 
@@ -42,15 +73,10 @@ BEGIN {
                         local $level = $level + 1;
                         my $self =
                           $level == 1 ? $STORE->get($class) : $orig_self;
-                        if (wantarray) {
-                            my @ret = $code->($self, @args);
-                            $STORE->set($class => $self);
-                            return @ret;
-                        } else {
-                            my $ret = $code->($self, @args);
-                            $STORE->set($class => $self);
-                            return $ret;
-                        }
+
+                        my $ret = Test::SharedFork::Contextual::call(sub { $self->$code(@args) });
+                        $STORE->set($class => $self);
+                        return $ret->result;
                     },
                 );
             }
