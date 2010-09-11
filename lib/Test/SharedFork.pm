@@ -13,19 +13,64 @@ my $STORE;
 
 BEGIN {
     my $builder = __PACKAGE__->builder;
-    $STORE = Test::SharedFork::Store->new(
-        cb => sub {
-            my $store = shift;
-            tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
-              $store, 'Curr_Test';
-            tie @{ $builder->{Test_Results} },
-              'Test::SharedFork::Array', $store, 'Test_Results';
-        },
-        init => +{
-            Test_Results => $builder->{Test_Results},
-            Curr_Test    => $builder->{Curr_Test},
-        },
-    );
+
+    if (Test::Builder->VERSION > 2.00) {
+        # older Test::Builder
+        $STORE = Test::SharedFork::Store->new();
+
+        our $level = 0;
+        for my $class (qw/Test::Builder2::History Test::Builder2::Counter/) {
+            my $meta = $class->meta;
+            my @methods = $meta->get_method_list;
+            my $orig =
+                $class eq 'Test::Builder2::History'
+              ? $builder->{History}
+              : $builder->{History}->counter;
+            $orig->{hacked}++;
+            $STORE->set($class => $orig);
+            for my $method (@methods) {
+                next if $method =~ /^_/;
+                next if $method eq 'meta';
+                next if $method eq 'create';
+                next if $method eq 'singleton';
+                $meta->add_around_method_modifier(
+                    $method => sub {
+                        my ($code, $orig_self, @args) = @_;
+                        return $orig_self->$code(@args) if (! ref $orig_self) || ! $orig_self->{hacked};
+
+                        my $lock = $STORE->get_lock();
+                        local $level = $level + 1;
+                        my $self =
+                          $level == 1 ? $STORE->get($class) : $orig_self;
+                        if (wantarray) {
+                            my @ret = $code->($self, @args);
+                            $STORE->set($class => $self);
+                            return @ret;
+                        } else {
+                            my $ret = $code->($self, @args);
+                            $STORE->set($class => $self);
+                            return $ret;
+                        }
+                    },
+                );
+            }
+        }
+    } else {
+        # older Test::Builder
+        $STORE = Test::SharedFork::Store->new(
+            cb => sub {
+                my $store = shift;
+                tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
+                $store, 'Curr_Test';
+                tie @{ $builder->{Test_Results} },
+                'Test::SharedFork::Array', $store, 'Test_Results';
+            },
+            init => +{
+                Test_Results => $builder->{Test_Results},
+                Curr_Test    => $builder->{Curr_Test},
+            },
+        );
+    }
 
     # make methods atomic.
     no strict 'refs';
@@ -38,6 +83,7 @@ BEGIN {
             $orig->(@_);
         };
     };
+
 }
 
 {
