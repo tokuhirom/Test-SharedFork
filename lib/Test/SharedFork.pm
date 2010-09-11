@@ -26,7 +26,7 @@ BEGIN {
                 $class eq 'Test::Builder2::History'
               ? $builder->{History}
               : $builder->{History}->counter;
-            $orig->{hacked}++;
+            $orig->{test_sharedfork_hacked}++;
             $STORE->set($class => $orig);
             for my $method (@methods) {
                 next if $method =~ /^_/;
@@ -36,7 +36,7 @@ BEGIN {
                 $meta->add_around_method_modifier(
                     $method => sub {
                         my ($code, $orig_self, @args) = @_;
-                        return $orig_self->$code(@args) if (! ref $orig_self) || ! $orig_self->{hacked};
+                        return $orig_self->$code(@args) if (! ref $orig_self) || ! $orig_self->{test_sharedfork_hacked};
 
                         my $lock = $STORE->get_lock();
                         local $level = $level + 1;
