@@ -21,6 +21,7 @@ BEGIN {
         builder => __PACKAGE__->builder,
     );
 
+    # make methods atomic.
     no strict 'refs';
     no warnings 'redefine';
     for my $name (qw/ok skip todo_skip current_test/) {
