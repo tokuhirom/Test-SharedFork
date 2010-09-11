@@ -15,7 +15,7 @@ BEGIN {
     my $builder = __PACKAGE__->builder;
 
     if (Test::Builder->VERSION > 2.00) {
-        # older Test::Builder
+        # new Test::Builder
         $STORE = Test::SharedFork::Store->new();
 
         our $level = 0;
