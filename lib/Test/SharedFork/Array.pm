@@ -14,6 +14,7 @@ sub TIEARRAY {
 
 sub _get {
     my $self = shift;
+    my $lock = $self->{share}->get_lock();
     return $self->{share}->get('array');
 }
 sub FETCH {
@@ -29,12 +30,12 @@ sub FETCHSIZE {
 sub STORE {
     my ($self, $index, $val) = @_;
 
-    $self->{share}->lock_cb(sub {
-        my $share = $self->{share};
-        my $cur = $share->get_nolock('array');
-        $cur->[$index] = $val;
-        $share->set_nolock(array => $cur);
-    });
+    my $lock = $self->{share}->get_lock();
+
+    my $share = $self->{share};
+    my $cur = $share->get('array');
+    $cur->[$index] = $val;
+    $share->set(array => $cur);
 }
 
 1;

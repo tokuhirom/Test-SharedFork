@@ -11,12 +11,14 @@ sub TIESCALAR {
 
 sub FETCH {
     my $self = shift;
+    my $lock = $self->{share}->get_lock();
     $self->{share}->get('scalar');
 }
 
 sub STORE {
     my ($self, $val) = @_;
     my $share = $self->{share};
+    my $lock = $self->{share}->get_lock();
     $share->set('scalar' => $val);
 }
 
