@@ -7,6 +7,7 @@ use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
 use Test::SharedFork::Store;
+use Config;
 use 5.008000;
 
 {
@@ -44,6 +45,10 @@ my $STORE;
 
 BEGIN {
     my $builder = __PACKAGE__->builder;
+
+    if( $] >= 5.008001 && $Config{useithreads} && $INC{'threads.pm'} ) {
+        die "# Current version of Test::SharedFork does not supports ithreads.";
+    }
 
     if (Test::Builder->VERSION > 2.00) {
         # new Test::Builder
@@ -149,6 +154,10 @@ Test::SharedFork is utility module for Test::Builder.
 This module makes forking test!
 
 This module merges test count with parent process & child process.
+
+=head1 LIMITATIONS
+
+This version of the Test::SharedFork does not support ithreads, because L<threads::shared> conflicts with L<Storable>.
 
 =head1 AUTHOR
 

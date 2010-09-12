@@ -5,6 +5,8 @@ BEGIN {
         exit 0;
      }
 }
+use Test::More;
+plan skip_all => "Not implemented yet";
 use strict;
 
 # use threads before Test::More!

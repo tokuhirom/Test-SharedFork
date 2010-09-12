@@ -26,6 +26,10 @@ This module makes forking test!
 
 This module merges test count with parent process & child process.
 
+# LIMITATIONS
+
+This version of the Test::SharedFork does not support ithreads, because [threads::shared](http://search.cpan.org/perldoc?threads::shared) conflicts with [Storable](http://search.cpan.org/perldoc?Storable).
+
 # AUTHOR
 
 Tokuhiro Matsuno <tokuhirom  slkjfd gmail.com>
