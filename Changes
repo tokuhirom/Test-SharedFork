@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.16
+
+    - doc tweaks
+
 0.15
 
         - added "LIMITATION" section to docs.
