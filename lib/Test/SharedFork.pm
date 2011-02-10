@@ -151,7 +151,8 @@ Test::SharedFork - fork test
 =head1 DESCRIPTION
 
 Test::SharedFork is utility module for Test::Builder.
-This module makes forking test!
+
+This module makes L<fork(2)> safety in your test case.
 
 This module merges test count with parent process & child process.
 
