@@ -109,7 +109,7 @@ BEGIN {
     for my $name (qw/ok skip todo_skip current_test/) {
         my $orig = *{"Test::Builder::${name}"}{CODE};
         *{"Test::Builder::${name}"} = sub {
-            local $Test::Builder::Level += 3;
+            local $Test::Builder::Level = $Test::Builder::Level + 3;
             my $lock = $STORE->get_lock(); # RAII
             $orig->(@_);
         };
