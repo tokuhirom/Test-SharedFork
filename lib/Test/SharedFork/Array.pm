@@ -28,6 +28,13 @@ sub FETCHSIZE {
     scalar @$ary;
 }
 
+sub STORESIZE {
+    my ($self, $size) = @_;
+    my $lock = $self->{share}->get_lock();
+    my $ary  = $self->_get();
+    $#$ary   = $size - 1;
+}
+
 sub STORE {
     my ($self, $index, $val) = @_;
 
