@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.17
+
+    - fixed test level(hoelzro)
+
 0.16
 
     - doc tweaks
