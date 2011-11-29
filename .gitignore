@@ -10,3 +10,17 @@ Makefile.old
 nytprof.out
 \.sw[pon]
 *.bak
+inc/
+ppport.h
+*.sw[po]
+*.old
+Build
+_build/
+xshelper.h
+tags
+blib/
+MYMETA.*
+META.json
+README
+^inc/
+Test-SharedFork-*/

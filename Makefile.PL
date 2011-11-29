@@ -16,5 +16,4 @@ tests 't/*.t t/*/*.t t/*/*/*.t';
 author_tests 'xt';
 
 readme_markdown_from 'lib/Test/SharedFork.pm';
-auto_include;
 WriteAll;
