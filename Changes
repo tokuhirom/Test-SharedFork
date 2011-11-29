@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::SharedFork
 
+0.19
+
+    - fixed TB2 support(tokuhirom)
+
 0.18
 
     - More fixes for failure locations(hoelzro)
