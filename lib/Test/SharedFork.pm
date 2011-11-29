@@ -50,25 +50,23 @@ BEGIN {
         die "# Current version of Test::SharedFork does not supports ithreads.";
     }
 
-    if (Test::Builder->VERSION > 2.00) {
+    if (Test::Builder->VERSION > 1.005) {
+        # TODO: hook TB2::threads::shared::off instead of following hacks.
         # new Test::Builder
         $STORE = Test::SharedFork::Store->new();
+        require TB2::History;
 
+        # wrap the moriginal methods
         our $level = 0;
-        for my $class (qw/Test::Builder2::History Test::Builder2::Counter/) {
+        for my $class (qw/TB2::History TB2::Counter/) {
             my $meta = $class->meta;
             my @methods = $meta->get_method_list;
-            my $orig =
-                $class eq 'Test::Builder2::History'
-              ? $builder->{History}
-              : $builder->{History}->counter;
-            $orig->{test_sharedfork_hacked}++;
-            $STORE->set($class => $orig);
             for my $method (@methods) {
                 next if $method =~ /^_/;
                 next if $method eq 'meta';
                 next if $method eq 'create';
                 next if $method eq 'singleton';
+                next if $method eq 'buildstack';
                 $meta->add_around_method_modifier(
                     $method => sub {
                         my ($code, $orig_self, @args) = @_;
@@ -85,6 +83,15 @@ BEGIN {
                     },
                 );
             }
+        }
+        for my $obj ( $builder->counter ) {
+            my $klass = ref($obj);
+            unless ($klass) {
+                require Data::Dumper;
+                die "Cannot fetch object: " . Data::Dumper::Dumper($builder);
+            }
+            $obj->{test_sharedfork_hacked}++;
+            $STORE->set( $klass => $obj );
         }
     } else {
         # older Test::Builder
