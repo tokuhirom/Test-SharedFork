@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::SharedFork
 
+0.20
+
+    - test_requires Time::HiRes for redhat.
+      (berekuk++)
+
 0.19
 
     - fixed TB2 support(tokuhirom)
