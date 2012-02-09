@@ -11,7 +11,7 @@ requires 'Test::More' => 0.88; # Test::More 0.88 is really needed
 
 test_requires 'App::Prove';
 test_requires 'Test::Requires';
-test_requires 'Time::HiRes';
+test_requires 'Time::HiRes'; # workaround for redhat. https://github.com/tokuhirom/test-sharedfork/pull/3
 
 tests 't/*.t t/*/*.t t/*/*/*.t';
 author_tests 'xt';
