@@ -1,14 +1,21 @@
 package Test::SharedFork::Handler::Early;
 
-use Storable qw/retrieve/;
+use Storable qw/nstore retrieve/;
 use TB2::Mouse;
 with "TB2::EventHandler";
 
 use Fcntl qw/:flock :seek :DEFAULT/;
+use File::Temp;
+use Carp;
 
 has filename => (
     is  => 'ro',
     isa => 'Str',
+    default => sub {
+        my $filename = File::Temp::tmpnam();
+        nstore({}, $filename);
+        return $filename;
+    }
 );
 
 has fh => (

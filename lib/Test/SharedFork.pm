@@ -25,14 +25,9 @@ BEGIN {
         require Test::SharedFork::Handler::Late;
         require File::Temp;
 
-        my $filename = File::Temp::tmpnam();
-        sysopen my $fh, $filename, O_RDWR|O_CREAT or die $!;
-        $fh->autoflush();
-        nstore_fd({}, $fh);
-
         my $store = Test::SharedFork::Store->new();
         my $state = TB2::TestState->default;
-        my $early = Test::SharedFork::Handler::Early->new(filename => $filename);
+        my $early = Test::SharedFork::Handler::Early->new();
         my $late = Test::SharedFork::Handler::Late->new(early_handler => $early);
 
         $state->add_early_handlers($early);
