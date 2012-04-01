@@ -12,6 +12,13 @@ has early_handler => (
 );
 
 
+sub subtest_handler {
+    my $self = shift;
+    return $self->new(
+        early_handler => $self->early_handler->handler_for_subtest
+    );
+}
+
 # handle_event() handles anything not handled by some other method
 sub handle_event  {
     my $self = shift;

@@ -29,6 +29,21 @@ has pid => (
     default => $$
 );
 
+has handler_for_subtest => (
+    is  => 'rw',
+    isa => 'Test::SharedFork::Handler::Early',
+    lazy => 1,
+    default => sub {
+        return $_[0]->new;
+    }
+);
+
+
+sub subtest_handler {
+    my $self = shift;
+
+    return $self->handler_for_subtest;
+}
 
 # handle_event() handles anything not handled by some other method
 sub handle_event  {
