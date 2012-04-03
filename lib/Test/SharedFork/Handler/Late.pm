@@ -1,9 +1,9 @@
 package Test::SharedFork::Handler::Late;
 
-use Storable qw/nstore/;
 use TB2::Mouse;
 with "TB2::EventHandler";
 
+use Storable qw/nstore/;
 use Fcntl qw/:flock :seek/;
 
 has early_handler => (

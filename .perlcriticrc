@@ -1,0 +1,7 @@
+# Inform perlcritic that TB2::Mouse turns on strictures
+[TestingAndDebugging::RequireUseStrict]
+equivalent_modules = TB2::Mouse
+
+[TestingAndDebugging::RequireUseWarnings]
+equivalent_modules = TB2::Mouse
+
