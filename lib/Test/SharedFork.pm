@@ -23,9 +23,7 @@ BEGIN {
         require TB2::TestState;
         require Test::SharedFork::Handler::Early;
         require Test::SharedFork::Handler::Late;
-        require File::Temp;
 
-        my $store = Test::SharedFork::Store->new();
         my $state = TB2::TestState->default;
         my $early = Test::SharedFork::Handler::Early->new();
         my $late = Test::SharedFork::Handler::Late->new(early_handler => $early);
