@@ -23,7 +23,7 @@ Test::SharedFork - fork test
 
 Test::SharedFork is utility module for Test::Builder.
 
-This module makes L<fork(2)> safety in your test case.
+This module makes [fork(2)](http://man.he.net/man2/fork) safety in your test case.
 
 This module merges test count with parent process & child process.
 
