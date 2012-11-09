@@ -8,7 +8,7 @@ use App::Prove;
 TODO: {
     local $TODO = 'subtest is not supported yet';
     my $prove = App::Prove->new();
-    $prove->process_args('-Ilib', 't/nest/subtest.ttt');
+    $prove->process_args('--norc', '-Ilib', 't/nest/subtest.ttt');
     ok(!$prove->run(), 'this test should fail');
 };
 
