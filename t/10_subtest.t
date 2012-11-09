@@ -5,11 +5,16 @@ use Test::More tests => 1;
 use Test::Requires {'Test::More' => 0.96};
 use App::Prove;
 
-TODO: {
-    local $TODO = 'subtest is not supported yet';
+if ($Test::More::VERSION < 1) {
+    TODO: {
+        local $TODO = 'subtest is not supported yet';
+        my $prove = App::Prove->new();
+        $prove->process_args('--norc', '-Ilib', 't/nest/subtest.ttt');
+        ok(!$prove->run(), 'this test should fail');
+    };
+} else {
     my $prove = App::Prove->new();
-    $prove->process_args('--norc', '-Ilib', 't/nest/subtest.ttt');
+    $prove->process_args('-Ilib', 't/nest/subtest.ttt');
+    close STDERR;  # don't allow prove to display expected failure diagnostics
     ok(!$prove->run(), 'this test should fail');
-};
-
-
+}
