@@ -1,5 +1,13 @@
 Revision history for Perl extension Test::SharedFork
 
+0.21
+
+    commit 8a94505105f87671ea03fed02eb6611bf7156e71
+    Author: tokuhirom <tokuhirom@gmail.com>
+    Date:   Fri Nov 9 09:57:36 2012 +0900
+
+    t/10_subtest.t: added --norc option for more portable testing.
+
 0.20
 
     - test_requires Time::HiRes for redhat.
