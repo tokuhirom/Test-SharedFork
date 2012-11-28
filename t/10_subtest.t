@@ -14,7 +14,7 @@ if ($Test::More::VERSION < 1) {
     };
 } else {
     my $prove = App::Prove->new();
-    $prove->process_args('-Ilib', 't/nest/subtest.ttt');
+    $prove->process_args('--norc', '-Ilib', 't/nest/subtest.ttt');
     close STDERR;  # don't allow prove to display expected failure diagnostics
     ok(!$prove->run(), 'this test should fail');
 }
