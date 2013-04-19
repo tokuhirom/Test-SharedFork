@@ -33,7 +33,7 @@ sub open {
     if (my $cb = $self->{callback_on_open}) {
         $cb->($self);
     }
-    sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;
+    sysopen my $fh, $self->{filename}, O_RDWR|O_CREAT or die $!;  ## no critic (ProhibitBitwiseOperators)
     $fh->autoflush(1);
     $self->{fh} = $fh;
 }
@@ -56,6 +56,7 @@ sub set {
 
     $self->_reopen_if_needed;
 
+    ## no critic (ProhibitAccessOfPrivateData)
     seek $self->{fh}, 0, SEEK_SET or die $!;
     my $dat = Storable::fd_retrieve($self->{fh});
     $dat->{$key} = $val;
@@ -100,6 +101,7 @@ sub new {
 
     $store->_reopen_if_needed;
 
+    ## no critic (ProhibitAccessOfPrivateData)
     if ($store->{lock}++ == 0) {
         flock $store->{fh}, LOCK_EX or die $!;
     }
