@@ -42,7 +42,7 @@ sub STORE {
 
     my $share = $self->{share};
     my $cur = $share->get($self->{key});
-    $cur->[$index] = $val;
+    $cur->[$index] = $val;       ## no critic (ProhibitAccessOfPrivateData)
     $share->set($self->{key} => $cur);
 }
 

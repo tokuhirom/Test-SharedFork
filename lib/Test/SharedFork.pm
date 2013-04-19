@@ -90,12 +90,15 @@ BEGIN {
                 require Data::Dumper;
                 die "Cannot fetch object: " . Data::Dumper::Dumper($builder);
             }
+            ## no critic (ValuesAndExpressions::ProhibitAccessOfPrivateData)
             $obj->{test_sharedfork_hacked}++;
             $STORE->set( $klass => $obj );
         }
     } else {
         # older Test::Builder
         $STORE = Test::SharedFork::Store->new(
+            ## Grabbing at the guts of Test::Builder on purpose
+            ## no critic (ValuesAndExpressions::ProhibitAccessOfPrivateData)
             cb => sub {
                 my $store = shift;
                 tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
