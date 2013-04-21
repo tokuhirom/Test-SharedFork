@@ -6,6 +6,9 @@ eval q{
         'Subroutines::ProhibitExplicitReturnUndef',
         'TestingAndDebugging::ProhibitNoStrict',
         'ControlStructures::ProhibitMutatingListFunctions',
+        'ProhibitAccessOfPrivateData',
+        'ProhibitBitwiseOperators',
+        'ValuesAndExpressions::ProhibitAccessOfPrivateData',
     ]
 };
 plan skip_all => "Test::Perl::Critic 1.02+ is not installed." if $@;
