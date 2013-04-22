@@ -20,7 +20,14 @@ xshelper.h
 tags
 blib/
 MYMETA.*
-META.json
 README
 ^inc/
 Test-SharedFork-*/
+/test-sharedfork-*
+/.build
+/_build_params
+/Build
+!Build/
+!META.json
+/Test-SharedFork-*
+!LICENSE

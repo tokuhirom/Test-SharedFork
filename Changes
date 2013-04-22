@@ -1,5 +1,7 @@
 Revision history for Perl extension Test::SharedFork
 
+{{$NEXT}}
+
 0.21
 
     commit 8a94505105f87671ea03fed02eb6611bf7156e71

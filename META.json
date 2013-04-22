@@ -1,0 +1,81 @@
+{
+   "abstract" : "fork test",
+   "author" : [
+      "Tokuhiro Matsuno <tokuhirom  slkjfd gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.0.53, CPAN::Meta::Converter version 2.130880",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Test-SharedFork",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "CPAN::Meta::Prereqs" : "0",
+            "Module::Build" : "0.38"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion" : "0.10108",
+            "Test::Pod" : "1.41",
+            "Test::Spellunker" : "v0.0.12"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "File::Temp" : "0",
+            "Test::Builder" : "0.32",
+            "Test::Builder::Module" : "0",
+            "Test::More" : "0.88",
+            "perl" : "5.008_001"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "App::Prove" : "0",
+            "Test::Builder::Tester" : "0",
+            "Test::Requires" : "0",
+            "Time::HiRes" : "0"
+         }
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/tokuhirom/test-sharedfork/issues"
+      },
+      "homepage" : "https://github.com/tokuhirom/test-sharedfork",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/tokuhirom/test-sharedfork.git",
+         "web" : "https://github.com/tokuhirom/test-sharedfork"
+      }
+   },
+   "version" : "0.22",
+   "x_contributors" : [
+      "lestrrat <lestrrat+github@gmail.com>",
+      "Rob Hoelz <rob@hoelz.ro>",
+      "Vyacheslav Matyukhin <me@berekuk.ru>",
+      "Michael G. Schwern <schwern@pobox.com>",
+      "tokuhirom <tokuhirom@gmail.com>"
+   ]
+}
