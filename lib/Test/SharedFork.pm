@@ -140,7 +140,7 @@ konbuizm
 
 =head1 SEE ALSO
 
-L<Test::TCP>, L<Test::Fork>, L<Test::MultipleFork>
+L<Test::TCP>, L<Test::Fork>, L<Test::MultiFork>
 
 =head1 LICENSE
 
