@@ -31,6 +31,11 @@ my %args = (
 
     test_files           => ((-d '.git' || $ENV{RELEASE_TESTING}) && -d 'xt') ? 't/ xt/' : 't/',
     recursive_test_files => 1,
+    meta_merge => {
+        resources => {
+            repository => 'https://github.com/tokuhirom/test-sharedfork'
+        }
+    },
 );
 if (-d 'share') {
     $args{share_dir} = 'share';
