@@ -1,100 +1,98 @@
-Revision history for Perl extension Test::SharedFork
+Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
-0.21
+0.21 2012-11-28
 
-    commit 8a94505105f87671ea03fed02eb6611bf7156e71
-    Author: tokuhirom <tokuhirom@gmail.com>
-    Date:   Fri Nov 9 09:57:36 2012 +0900
+    - t/10_subtest.t: added --norc option for more portable testing.
 
-    t/10_subtest.t: added --norc option for more portable testing.
-
-0.20
+0.20 2012-02-09
 
     - test_requires Time::HiRes for redhat.
       (berekuk++)
 
-0.19
+0.19 2011-11-29
 
     - fixed TB2 support(tokuhirom)
 
-0.18
+0.18 2011-10-04
 
     - More fixes for failure locations(hoelzro)
 
-0.17
+0.17 2011-10-03
 
     - fixed test level(hoelzro)
 
-0.16
+0.16 2011-02-10
 
     - doc tweaks
 
-0.15
+0.15 2010-09-11
 
-        - added "LIMITATION" section to docs.
-          I gave up to support ithreads.
+    - added "LIMITATION" section to docs.
+      I gave up to support ithreads.
 
-0.14
+0.14 2010-09-11
 
-        - release!
+    - release!
 
-0.13_01
+0.13_01 2010-09-10
 
-        - Test::Builder2 support
+    - Test::Builder2 support
 
-0.12
+0.12 2010-08-17
 
-        - fixed lazy loading issue RT#60426
-          (reported by J.)
+    - fixed lazy loading issue RT#60426
+      (reported by J.)
 
-0.11
+0.11 2009-12-16
 
-        - write depended perl version. this module requires perl5.8 or later.
+    - write depended perl version. this module requires perl5.8 or later.
 
-0.10
+0.10 2009-12-14
 
-        - oops
+    - oops
 
-0.09
+0.09 2009-10-26
 
-        - fixed $Test::Builder::Level(by konbuizm)
+    - fixed $Test::Builder::Level(by konbuizm)
 
-0.08
+0.08 2009-10-18
 
-        - fixed deps for Test::More 0.88(thanks to andk++)
+    - fixed deps for Test::More 0.88(thanks to andk++)
 
-0.07(not released to cpan)
+0.07 not released
 
-        - cleanup code.->parent, ->child, ->fork was obsoleted.
+    - cleanup code.->parent, ->child, ->fork was obsoleted.
 
-0.07_01
+0.07_01 2009-10-18
 
-        - win32 support
-        - added premitive test cases
+    - win32 support
+    - added premitive test cases
 
-0.06
+0.06 2009-10-15
 
-        - call parent() automatically(reported by kazuho++)
+    - call parent() automatically(reported by kazuho++)
 
-0.05
+0.05 2009-04-12
 
-        - enhancements for subtests support
+    - enhancements for subtests support
 
-0.04
+0.04 2009-03-25
 
-        - [BUG] previous version does not works with many fork
+    - [BUG] previous version does not works with many fork
 
-0.03
+0.03 2009-03-25
 
-        - added Test::SharedFork->fork()
-        - use flock(2) instead of IPC::ShareLite
+    - added Test::SharedFork->fork()
+    - use flock(2) instead of IPC::ShareLite
 
-0.02
+0.02 2009-03-25
 
-        - ooppppsss. Test::Fork was already used by schwern.
-          rename to Test::SharedFork
+    - ooppppsss. Test::Fork was already used by schwern.
+      rename to Test::SharedFork
 
-0.01    Wed Mar 25 14:06:28 2009
-        - original version
+0.01 2009-03-25 14:06:28
+
+    - original version
+
