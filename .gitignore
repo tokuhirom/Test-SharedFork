@@ -31,3 +31,4 @@ Test-SharedFork-*/
 !META.json
 /Test-SharedFork-*
 !LICENSE
+/Build.bat

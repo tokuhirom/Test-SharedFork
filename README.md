@@ -45,7 +45,7 @@ konbuizm
 
 # SEE ALSO
 
-[Test::TCP](http://search.cpan.org/perldoc?Test::TCP), [Test::Fork](http://search.cpan.org/perldoc?Test::Fork), [Test::MultipleFork](http://search.cpan.org/perldoc?Test::MultipleFork)
+[Test::TCP](http://search.cpan.org/perldoc?Test::TCP), [Test::Fork](http://search.cpan.org/perldoc?Test::Fork), [Test::MultiFork](http://search.cpan.org/perldoc?Test::MultiFork)
 
 # LICENSE
 
