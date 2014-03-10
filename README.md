@@ -29,7 +29,7 @@ This module merges test count with parent process & child process.
 
 # LIMITATIONS
 
-This version of the Test::SharedFork does not support ithreads, because [threads::shared](http://search.cpan.org/perldoc?threads::shared) conflicts with [Storable](http://search.cpan.org/perldoc?Storable).
+This version of the Test::SharedFork does not support ithreads, because [threads::shared](https://metacpan.org/pod/threads::shared) conflicts with [Storable](https://metacpan.org/pod/Storable).
 
 # AUTHOR
 
@@ -45,7 +45,7 @@ konbuizm
 
 # SEE ALSO
 
-[Test::TCP](http://search.cpan.org/perldoc?Test::TCP), [Test::Fork](http://search.cpan.org/perldoc?Test::Fork), [Test::MultiFork](http://search.cpan.org/perldoc?Test::MultiFork)
+[Test::TCP](https://metacpan.org/pod/Test::TCP), [Test::Fork](https://metacpan.org/pod/Test::Fork), [Test::MultiFork](https://metacpan.org/pod/Test::MultiFork)
 
 # LICENSE
 

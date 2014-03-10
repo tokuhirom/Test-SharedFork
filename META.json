@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom  slkjfd gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.8.3, CPAN::Meta::Converter version 2.132830",
+   "generated_by" : "Minilla/v0.11.1, CPAN::Meta::Converter version 2.133380",
    "license" : [
       "perl_5"
    ],
@@ -62,13 +62,13 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/tokuhirom/test-sharedfork/issues"
+         "web" : "https://github.com/tokuhirom/Test-SharedFork/issues"
       },
-      "homepage" : "https://github.com/tokuhirom/test-sharedfork",
+      "homepage" : "https://github.com/tokuhirom/Test-SharedFork",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/tokuhirom/test-sharedfork.git",
-         "web" : "https://github.com/tokuhirom/test-sharedfork"
+         "url" : "git://github.com/tokuhirom/Test-SharedFork.git",
+         "web" : "https://github.com/tokuhirom/Test-SharedFork"
       }
    },
    "version" : "0.22",
