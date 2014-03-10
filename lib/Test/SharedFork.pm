@@ -43,8 +43,8 @@ use 5.008000;
 
 my $STORE;
 
-BEGIN {
-    my $builder = __PACKAGE__->builder;
+sub _mangle_builder {
+    my $builder = shift;
 
     if( $] >= 5.008001 && $Config{useithreads} && $INC{'threads.pm'} ) {
         die "# Current version of Test::SharedFork does not supports ithreads.";
@@ -59,9 +59,11 @@ BEGIN {
             cb => sub {
                 my $store = shift;
                 tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
-                $store, 'Curr_Test';
+                    $store, 'Curr_Test';
+                tie $builder->{Is_Passing}, 'Test::SharedFork::Scalar',
+                    $store, 'Is_Passing';
                 tie @{ $builder->{Test_Results} },
-                'Test::SharedFork::Array', $store, 'Test_Results';
+                    'Test::SharedFork::Array', $store, 'Test_Results';
             },
             init => +{
                 Test_Results => $builder->{Test_Results},
@@ -72,7 +74,7 @@ BEGIN {
         # make methods atomic.
         no strict 'refs';
         no warnings 'redefine';
-        for my $name (qw/ok skip todo_skip current_test/) {
+        for my $name (qw/ok skip todo_skip current_test is_passing/) {
             my $orig = *{"Test::Builder::${name}"}{CODE};
             *{"Test::Builder::${name}"} = sub {
                 local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -81,6 +83,11 @@ BEGIN {
             };
         };
     }
+}
+
+BEGIN {
+    my $builder = __PACKAGE__->builder;
+    _mangle_builder($builder);
 }
 
 {
