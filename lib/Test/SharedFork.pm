@@ -100,6 +100,8 @@ BEGIN {
 1;
 __END__
 
+=for stopwords slkjfd yappo konbuizm
+
 =head1 NAME
 
 Test::SharedFork - fork test
