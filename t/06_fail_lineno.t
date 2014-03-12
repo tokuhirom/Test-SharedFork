@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More tests => 2;
 use Test::SharedFork;
+use File::Spec::Functions qw/ catfile /;
 use File::Temp qw/tempfile/;
 
 local $ENV{LANG} = "C";
@@ -17,5 +18,7 @@ my $out = do {
 };
 
 unlike($out, qr{lib/Test/SharedFork});
-like($out, qr{t/06_fail_lineno.t line \d+\.});
-
+{
+    my $path = catfile(qw(t 06_fail_lineno.t));
+    like($out, qr{\Q$path\E line \d+\.});
+}
