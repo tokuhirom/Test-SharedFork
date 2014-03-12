@@ -2,6 +2,11 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.23 2014-03-12T20:12:11Z
+
+    - 06_fail_lineno.t fails on Windows due to path separator #9
+      (nanis)
+
 0.22 2014-03-11T00:01:43Z
 
     - Care the is_passing value.
