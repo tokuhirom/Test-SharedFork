@@ -68,6 +68,7 @@ sub _mangle_builder {
             init => +{
                 Test_Results => $builder->{Test_Results},
                 Curr_Test    => $builder->{Curr_Test},
+                Is_Passing   => 1,
             },
         );
 
