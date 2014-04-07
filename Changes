@@ -2,6 +2,11 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.24 2014-04-07T21:21:56Z
+
+    - Cygwin 64-bit - allow tests to pass
+      (rwhitworth)
+
 0.23 2014-03-12T20:12:11Z
 
     - 06_fail_lineno.t fails on Windows due to path separator #9
