@@ -9,7 +9,8 @@ if ($pid == 0) {
     my $i = 0;
     for (1..20) {
         $i++;
-        ok 1, "child $_"
+        ok 1, "child $_";
+        sleep(1);
     }
     is $i, 20, 'child finished';
 
@@ -20,6 +21,7 @@ if ($pid == 0) {
     for (1..20) {
         $i++;
         ok 1, "parent $_";
+        sleep(1);
     }
     is $i, 20, 'parent finished';
     waitpid($pid, 0);
