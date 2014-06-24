@@ -2,6 +2,10 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.25 2014-06-24T01:34:10Z
+
+    - Switch to EUMM
+
 0.24 2014-04-07T21:21:56Z
 
     - Cygwin 64-bit - allow tests to pass
