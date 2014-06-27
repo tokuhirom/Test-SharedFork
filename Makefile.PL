@@ -40,6 +40,6 @@ if ($ExtUtils::MakeMaker::VERSION >= 6.57_01) {
 WriteMakefile(
     NAME     => 'Test::SharedFork',
     DISTNAME => 'Test-SharedFork',
-    VERSION  => '0.25',
+    VERSION  => '0.26',
     %args,
 );

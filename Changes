@@ -2,6 +2,11 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.26 2014-06-27T04:20:47Z
+
+    - Fix support for Result_Stream Test::Builder branch
+      (exodist)
+
 0.25 2014-06-24T01:34:10Z
 
     - Switch to EUMM
