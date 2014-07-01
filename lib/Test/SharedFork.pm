@@ -126,6 +126,7 @@ sub _mangle_builder {
             my $orig = *{"Test::Builder::${name}"}{CODE};
             *{"Test::Builder::${name}"} = sub {
                 local $Test::Builder::Level = $Test::Builder::Level + 1;
+                local $Test::Builder::BLevel = $Test::Builder::BLevel + 1;
                 my $lock = $STORE->get_lock(); # RAII
                 $orig->(@_);
             };
