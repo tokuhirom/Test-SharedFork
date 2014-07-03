@@ -2,6 +2,14 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.27 2014-07-03T05:37:00Z
+
+    commit fa8821ff5fe7b44a2461ea58e537ea01221504ed
+    Author: Chad Granum <chad.granum@dreamhost.com>
+    Date:   Tue Jul 1 15:13:28 2014 -0700
+
+        Fix another issue with Result_Stream branch of TB
+
 0.26 2014-06-27T04:20:47Z
 
     - Fix support for Result_Stream Test::Builder branch
