@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.27';
+our $VERSION = '0.28';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -122,6 +122,7 @@ sub _mangle_builder {
         # make methods atomic.
         no strict 'refs';
         no warnings 'redefine';
+        no warnings 'uninitialized';
         for my $name (qw/ok skip todo_skip current_test is_passing/) {
             my $orig = *{"Test::Builder::${name}"}{CODE};
             *{"Test::Builder::${name}"} = sub {

@@ -2,6 +2,11 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.28 2014-07-04T07:37:50Z
+
+    - Fixed minor testing issue on Win32.
+      (charsbar++)
+
 0.27 2014-07-03T05:37:00Z
 
     commit fa8821ff5fe7b44a2461ea58e537ea01221504ed
