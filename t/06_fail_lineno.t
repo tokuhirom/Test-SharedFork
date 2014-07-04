@@ -19,6 +19,5 @@ my $out = do {
 
 unlike($out, qr{lib/Test/SharedFork});
 {
-    my $path = catfile(qw(t 06_fail_lineno.t));
-    like($out, qr{\Q$path\E line \d+\.});
+    like($out, qr{t[\\/]06_fail_lineno\.t line \d+\.});
 }
