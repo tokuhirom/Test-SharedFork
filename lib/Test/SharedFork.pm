@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -53,6 +53,9 @@ sub _mangle_builder {
     if ($builder->can("coordinate_forks")) {
         # Use Test::Builder's implementation.
         $builder->new->coordinate_forks(1);
+    } elsif (Test::Stream->can('use_fork')) {
+        my $stream = $builder->{stream} || Test::Stream->shared;
+        $stream->use_fork;
     } else {
         if ($builder->can('trace_test')) {
             my $stream   = $builder->stream;
