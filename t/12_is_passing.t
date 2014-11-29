@@ -1,8 +1,15 @@
 use strict;
 use warnings;
 use utf8;
+use Config;
 use Test::More;
 use Test::SharedFork;
+
+plan skip_all => "fork not supported on this platform"
+  unless $Config::Config{d_fork} || $Config::Config{d_pseudofork} ||
+    (($^O eq 'MSWin32' || $^O eq 'NetWare') and
+     $Config::Config{useithreads} and
+     $Config::Config{ccflags} =~ /-DPERL_IMPLICIT_SYS/);
 
 sub do_in_fork {
     my ( $action ) = @_;
