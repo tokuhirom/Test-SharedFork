@@ -45,7 +45,6 @@ do_in_fork(sub {
     $builder->ok(1);
 });
 
-Test::Stream::cull();
 ok !$builder->is_passing, 'Test::Builder->is_passing should still be falsy, even after a passing test post-fail';
 
 diag $out;

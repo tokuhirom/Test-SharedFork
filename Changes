@@ -2,6 +2,12 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+    - Fix test that accidentally got commited last release
+
+0.30 2015-04-28T20:19:58Z
+
+    - Minor changes to support newer Test::Stream versions
+
 0.28 2014-07-04T07:37:50Z
 
     - Fixed minor testing issue on Win32.
