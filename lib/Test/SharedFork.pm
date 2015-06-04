@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.31';
+our $VERSION = '0.32';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -53,80 +53,35 @@ sub _mangle_builder {
     if ($builder->can("coordinate_forks")) {
         # Use Test::Builder's implementation.
         $builder->new->coordinate_forks(1);
-    } elsif($INC{'Test/Stream.pm'}) {
-        if (Test::Stream->can('use_fork')) {
-            my $stream = $builder->{stream} || Test::Stream->shared;
-            $stream->use_fork;
-        }
-        else {
-            my $hub = $builder->{stream} || Test::Stream->shared;
-            $hub->enable_concurrency(join => undef, wait => undef);
+    } elsif($INC{'Test/Stream/Sync.pm'}) {
+        require Test::Stream::IPC;
+        Test::Stream::IPC->import;
+        my $stack = $builder->{Stack};
+        return if $stack->top->ipc;
+        my ($driver) = Test::Stream::IPC->drivers;
+        my $ipc = $driver->new();
+        for my $hub (@$stack) {
+            $hub->set_ipc($ipc);
+            $ipc->add_hub($hub->hid);
         }
     } else {
-        if ($builder->can('trace_test')) {
-            my $stream   = $builder->stream;
-            my $tap      = $stream->tap;
-            my $lresults = $stream->lresults;
-            $STORE = Test::SharedFork::Store->new(
-                cb => sub {
-                    my $store = shift;
-
-                    tie $stream->{tests_run}, 'Test::SharedFork::Scalar',
-                        $store, 'tests_run';
-                    tie $stream->{tests_failed}, 'Test::SharedFork::Scalar',
-                        $store, 'tests_failed';
-                    tie $stream->{is_passing}, 'Test::SharedFork::Scalar',
-                        $store, 'is_passing';
-
-                    if ($tap) {
-                        tie $tap->{number}, 'Test::SharedFork::Scalar',
-                            $store, 'number';
-                        tie $tap->{ok_lock}, 'Test::SharedFork::Scalar',
-                            $store, 'ok_lock';
-                    }
-
-                    if ($lresults) {
-                        tie $lresults->{Curr_Test}, 'Test::SharedFork::Scalar',
-                            $store, 'Curr_Test';
-                        tie @{ $lresults->{Test_Results} },
-                            'Test::SharedFork::Array', $store, 'Test_Results';
-                    }
-                },
-                init => +{
-                    tests_run    => $stream->{tests_run},
-                    tests_failed => $stream->{tests_failed},
-                    is_passing   => 1,
-
-                    $tap ? (
-                        number => $tap->{number},
-                        ok_lock => $tap->{ok_lock},
-                    ) : (),
-
-                    $lresults ? (
-                        Test_Results => $builder->{Test_Results} || [],
-                        Curr_Test    => $builder->{Curr_Test} || 0,
-                    ) : (),
-                },
-            );
-        } else {
-            # older Test::Builder
-            $STORE = Test::SharedFork::Store->new(
-                cb => sub {
-                    my $store = shift;
-                    tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
-                        $store, 'Curr_Test';
-                    tie $builder->{Is_Passing}, 'Test::SharedFork::Scalar',
-                        $store, 'Is_Passing';
-                    tie @{ $builder->{Test_Results} },
-                        'Test::SharedFork::Array', $store, 'Test_Results';
-                },
-                init => +{
-                    Test_Results => $builder->{Test_Results},
-                    Curr_Test    => $builder->{Curr_Test},
-                    Is_Passing   => 1,
-                },
-            );
-        }
+        # older Test::Builder
+        $STORE = Test::SharedFork::Store->new(
+            cb => sub {
+                my $store = shift;
+                tie $builder->{Curr_Test}, 'Test::SharedFork::Scalar',
+                    $store, 'Curr_Test';
+                tie $builder->{Is_Passing}, 'Test::SharedFork::Scalar',
+                    $store, 'Is_Passing';
+                tie @{ $builder->{Test_Results} },
+                    'Test::SharedFork::Array', $store, 'Test_Results';
+            },
+            init => +{
+                Test_Results => $builder->{Test_Results},
+                Curr_Test    => $builder->{Curr_Test},
+                Is_Passing   => 1,
+            },
+        );
 
         # make methods atomic.
         no strict 'refs';

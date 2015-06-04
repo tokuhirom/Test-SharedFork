@@ -2,6 +2,13 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.32 2015-06-04T16:14:57Z
+
+    - Update for newer Test::Stream
+    - REmove some old Test::Stream support
+
+0.31 2015-04-28T20:25:31Z
+
     - Fix test that accidentally got commited last release
 
 0.30 2015-04-28T20:19:58Z
