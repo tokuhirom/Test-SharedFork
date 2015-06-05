@@ -12,7 +12,7 @@ use ExtUtils::MakeMaker;
 my %WriteMakefileArgs = (
     NAME     => 'Test::SharedFork',
     DISTNAME => 'Test-SharedFork',
-    VERSION  => '0.32',
+    VERSION  => '0.33',
     CONFIGURE_REQUIRES => {
   "ExtUtils::MakeMaker" => 0
 }
