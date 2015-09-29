@@ -2,6 +2,10 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.34 2015-09-29T14:53:27Z
+
+    - Support upcoming Test::Stream changes
+
 0.33 2015-06-06T03:36:58Z
 
     - Tell Test::Stream::IPC to poll for results

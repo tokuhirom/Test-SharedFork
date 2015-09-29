@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.33';
+our $VERSION = '0.34';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -56,6 +56,7 @@ sub _mangle_builder {
     } elsif($INC{'Test/Stream/Sync.pm'}) {
         require Test::Stream::IPC;
         Test::Stream::IPC->import('poll');
+        Test::Stream::IPC->enable_polling if Test::Stream::IPC->can('enable_polling');
         my $stack = $builder->{Stack};
         return if $stack->top->ipc;
         my ($driver) = Test::Stream::IPC->drivers;

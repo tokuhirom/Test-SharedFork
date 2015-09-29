@@ -12,7 +12,8 @@ use ExtUtils::MakeMaker;
 my %WriteMakefileArgs = (
     NAME     => 'Test::SharedFork',
     DISTNAME => 'Test-SharedFork',
-    VERSION  => '0.33',
+    VERSION  => '0.34',
+    EXE_FILES => [glob('script/*'), glob('bin/*')],
     CONFIGURE_REQUIRES => {
   "ExtUtils::MakeMaker" => 0
 }

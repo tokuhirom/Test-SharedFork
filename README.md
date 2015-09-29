@@ -33,7 +33,7 @@ This version of the Test::SharedFork does not support ithreads, because [threads
 
 # AUTHOR
 
-Tokuhiro Matsuno <tokuhirom  slkjfd gmail.com>
+Tokuhiro Matsuno &lt;tokuhirom  slkjfd gmail.com>
 
 yappo
 
