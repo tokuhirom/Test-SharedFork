@@ -2,6 +2,8 @@ Revision history for Perl module Test::SharedFork
 
 {{$NEXT}}
 
+0.35 2015-12-21T23:25:12Z
+
     - Support Test2
 
 0.34 2015-09-29T14:53:27Z

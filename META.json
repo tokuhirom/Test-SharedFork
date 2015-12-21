@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom  slkjfd gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.5.0, CPAN::Meta::Converter version 2.150001",
+   "generated_by" : "Minilla/v3.0.1, CPAN::Meta::Converter version 2.150001",
    "license" : [
       "perl_5"
    ],
@@ -28,7 +28,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "ExtUtils::MakeMaker" : "6.64"
          }
       },
       "develop" : {
@@ -70,7 +70,7 @@
          "web" : "https://github.com/tokuhirom/Test-SharedFork"
       }
    },
-   "version" : "0.34",
+   "version" : "0.35",
    "x_contributors" : [
       "lestrrat <lestrrat+github@gmail.com>",
       "Vyacheslav Matyukhin <me@berekuk.ru>",

@@ -3,19 +3,19 @@
 # DO NOT EDIT DIRECTLY.
 # =========================================================================
 
-use 5.008_001;
+use 5.006;
 use strict;
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.64;
 
 
 my %WriteMakefileArgs = (
     NAME     => 'Test::SharedFork',
     DISTNAME => 'Test-SharedFork',
-    VERSION  => '0.34',
+    VERSION  => '0.35',
     EXE_FILES => [glob('script/*'), glob('bin/*')],
     CONFIGURE_REQUIRES => {
-  "ExtUtils::MakeMaker" => 0
+  "ExtUtils::MakeMaker" => "6.64"
 }
 ,
     BUILD_REQUIRES     => {}
@@ -36,35 +36,5 @@ my %WriteMakefileArgs = (
 }
 ,
 );
-
-my $full_prereqs = {
-  "App::Prove" => 0,
-  "ExtUtils::MakeMaker" => 0,
-  "File::Temp" => 0,
-  "Test::Builder" => "0.32",
-  "Test::Builder::Module" => 0,
-  "Test::Builder::Tester" => 0,
-  "Test::More" => "0.88",
-  "Test::Requires" => 0,
-  "Time::HiRes" => 0,
-  "perl" => "5.008_001"
-}
-;
-
-unless (eval { ExtUtils::MakeMaker->VERSION(6.63_03) }) {
-    delete $WriteMakefileArgs{TEST_REQUIRES};
-    delete $WriteMakefileArgs{BUILD_REQUIRES};
-    $WriteMakefileArgs{PREREQ_PM} = $full_prereqs;
-}
-
-unless (eval { ExtUtils::MakeMaker->VERSION(6.52) }) {
-    delete $WriteMakefileArgs{CONFIGURE_REQUIRES};
-}
-
-unless (eval { ExtUtils::MakeMaker->VERSION(6.57_01) }) {
-    use File::Copy;
-    copy('META.yml', 'MYMETA.yml')   or warn "META.yml: $!";
-    copy('META.json', 'MYMETA.json') or warn "META.json: $!";
-}
 
 WriteMakefile(%WriteMakefileArgs);
