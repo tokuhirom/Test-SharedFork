@@ -2,7 +2,7 @@ package Test::SharedFork;
 use strict;
 use warnings;
 use base 'Test::Builder::Module';
-our $VERSION = '0.34';
+our $VERSION = '0.35';
 use Test::Builder 0.32; # 0.32 or later is needed
 use Test::SharedFork::Scalar;
 use Test::SharedFork::Array;
@@ -53,6 +53,28 @@ sub _mangle_builder {
     if ($builder->can("coordinate_forks")) {
         # Use Test::Builder's implementation.
         $builder->new->coordinate_forks(1);
+    } elsif($INC{'Test2/Global.pm'} || $INC{'Test2/API.pm'} || $INC{'Test2/Context.pm'}) {
+        require Test2::Global;
+
+        Test2::Global::test2_ipc_enable_polling();
+
+        # Check if we already have IPC
+        my $stack = $builder->{Stack};
+        return if $stack->top->ipc;
+
+        # Find a driver
+        my ($driver) = Test2::Global::test2_ipc_drivers();
+        unless ($driver) {
+            require Test2::IPC::Driver::Files;
+            $driver = 'Test2::IPC::Driver::Files';
+        }
+
+        # Add the IPC to all hubs
+        my $ipc = $driver->new();
+        for my $hub (@$stack) {
+            $hub->set_ipc($ipc);
+            $ipc->add_hub($hub->hid);
+        }
     } elsif($INC{'Test/Stream/Sync.pm'}) {
         require Test::Stream::IPC;
         Test::Stream::IPC->import('poll');
