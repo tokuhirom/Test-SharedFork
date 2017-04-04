@@ -54,16 +54,16 @@ sub _mangle_builder {
         # Use Test::Builder's implementation.
         $builder->new->coordinate_forks(1);
     } elsif($INC{'Test2/Global.pm'} || $INC{'Test2/API.pm'} || $INC{'Test2/Context.pm'}) {
-        require Test2::Global;
+        require Test2::API;
 
-        Test2::Global::test2_ipc_enable_polling();
+        Test2::API::test2_ipc_enable_polling();
 
         # Check if we already have IPC
         my $stack = $builder->{Stack};
         return if $stack->top->ipc;
 
         # Find a driver
-        my ($driver) = Test2::Global::test2_ipc_drivers();
+        my ($driver) = Test2::API::test2_ipc_drivers();
         unless ($driver) {
             require Test2::IPC::Driver::Files;
             $driver = 'Test2::IPC::Driver::Files';
