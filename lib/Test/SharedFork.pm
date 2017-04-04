@@ -53,7 +53,7 @@ sub _mangle_builder {
     if ($builder->can("coordinate_forks")) {
         # Use Test::Builder's implementation.
         $builder->new->coordinate_forks(1);
-    } elsif($INC{'Test2/Global.pm'} || $INC{'Test2/API.pm'} || $INC{'Test2/Context.pm'}) {
+    } elsif($INC{'Test2/API.pm'} || $INC{'Test2/API/Context.pm'}) {
         require Test2::API;
 
         Test2::API::test2_ipc_enable_polling();
