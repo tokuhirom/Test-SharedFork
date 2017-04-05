@@ -5,6 +5,7 @@ use Storable ();
 use Fcntl ':seek', ':DEFAULT', ':flock';
 use File::Temp ();
 use IO::Handle;
+use FileHandle;
 
 sub new {
     my $class = shift;
