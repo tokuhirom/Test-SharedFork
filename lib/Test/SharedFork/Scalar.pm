@@ -1,7 +1,6 @@
 package Test::SharedFork::Scalar;
 use strict;
 use warnings;
-use base 'Tie::Scalar';
 
 # create new tied scalar
 sub TIESCALAR {
