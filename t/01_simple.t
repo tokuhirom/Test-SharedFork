@@ -1,8 +1,17 @@
 use strict;
 use warnings;
-use Test::More tests => 43;
+use Config;
+use Test::More;
 use Test::SharedFork;
 use Time::HiRes qw/sleep/;
+
+plan skip_all => "fork not supported on this platform"
+  unless $Config::Config{d_fork} || $Config::Config{d_pseudofork} ||
+    (($^O eq 'MSWin32' || $^O eq 'NetWare') and
+     $Config::Config{useithreads} and
+     $Config::Config{ccflags} =~ /-DPERL_IMPLICIT_SYS/);
+
+plan tests => 43;
 
 my $pid = fork();
 if ($pid == 0) {
